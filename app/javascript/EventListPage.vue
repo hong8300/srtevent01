@@ -4,7 +4,7 @@
     <!-- https://icons.getbootstrap.jp/ -->
     <h2><i class="bi bi-card-list"></i>&nbsp;イベント一覧</h2>
     <p></br></p>
-    <p>イベント詳細からオペレーションを選択してください</br></p>
+    <p>イベントの詳細を確認するには「イベント詳細」からご確認ください。</br></p>
     <div class="row"> <!--- オペレーションボタン -->
       <div class="col-2"></div>
       <div class="col-10">
