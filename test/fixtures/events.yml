@@ -1,0 +1,29 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  description: MyString
+  rec_starttime: 2021-12-27 16:42:41
+  status: 1
+  output_filename: MyString
+  passphrase: MyString
+  server_url: MyString
+  server_port: MyString
+  sdata1: MyString
+  sdata2: MyString
+  idata1: 1
+  idata2: 1
+
+two:
+  name: MyString
+  description: MyString
+  rec_starttime: 2021-12-27 16:42:41
+  status: 1
+  output_filename: MyString
+  passphrase: MyString
+  server_url: MyString
+  server_port: MyString
+  sdata1: MyString
+  sdata2: MyString
+  idata1: 1
+  idata2: 1
