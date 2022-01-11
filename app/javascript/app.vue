@@ -32,7 +32,7 @@ import EventEditPage from 'EventEditPage.vue'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
 const router = new VueRouter({
-    mode: 'hash',
+  mode: 'hash',
   routes: [
     { path: '/list',
       name: 'EventListPage',
