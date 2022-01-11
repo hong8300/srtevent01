@@ -17,10 +17,8 @@ class Api::V1::EventsController < ApiController
 
     def create
       event = Event.new(event_params)
-      # pp "DEBUG"
-      # pp event
-      logger.debug("DEBUG MESSAGE----------------")
-      logger.debug(event.id)
+      # logger.debug("DEBUG MESSAGE----------------")
+      # logger.debug(event.id)
 
       event.status = 1
       event.server_url = "http://srtserv.unohana.co.jp"
@@ -31,12 +29,21 @@ class Api::V1::EventsController < ApiController
       event.idata1 = 0
       event.idata2 = 0
       if event.save
-        logger.debug("DEBUG 2")
-        logger.debug(event.id)
+        # logger.debug("DEBUG 2")
+        # logger.debug(event.id)
  
+        # サーバーポート生成
         event.server_port = 9800 + ( event.id % 100)
+        # ファイル名生成
         event.output_filename = "mxfrec-file-"+sprintf("%05d",event.id)+".mxf"
- 
+        # ステータスファイル作成
+        status_filename = Rails.root.to_s + "/cron/status/" + event.id.to_s + ".status"
+
+        logger.debug("-----------------------------------------")
+        logger.debug(status_filename)
+        File.open(status_filename,"w") do |f|
+          f.printf("%d",1)
+        end
         event.save
         render json: event, status: :created
       else
