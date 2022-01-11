@@ -37,13 +37,24 @@ class Api::V1::EventsController < ApiController
         # ファイル名生成
         event.output_filename = "mxfrec-file-"+sprintf("%05d",event.id)+".mxf"
         # ステータスファイル作成
-        status_filename = Rails.root.to_s + "/cron/status/" + event.id.to_s + ".status"
+        filename_body = Rails.root.to_s + "/cron/status/" + event.id.to_s
+        status_filename = filename_body + ".status"
+        info_filename = filename_body + ".info"
 
-        logger.debug("-----------------------------------------")
-        logger.debug(status_filename)
+        # logger.debug("-----------------------------------------")
+        # logger.debug(status_filename)
         File.open(status_filename,"w") do |f|
           f.printf("%d",1)
         end
+        s = event.rec_starttime.to_s 
+        File.open(info_filename,"w") do |f|
+          f.puts(sprintf("MDHM %s %s %s %s",s[5,2],s[8,2],s[11,2],s[14,2]))
+          f.puts(event.server_url)
+          f.puts(event.server_port)
+          f.puts(event.passphrase)
+          f.puts(event.output_filename)
+        end
+
         event.save
         render json: event, status: :created
       else
@@ -87,6 +98,8 @@ class Api::V1::EventsController < ApiController
     def render_status_500(exception)
       render json: { errors: [exception] }, status: 500
     end
+
+
 
   end
   
