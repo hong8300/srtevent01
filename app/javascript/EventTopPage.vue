@@ -4,7 +4,7 @@
       <p></br></p>    
       <img src="/assets/srt_icon.png" alt="SRT" width="150px" >
       <p></br></p>    
-      <h2><i class="bi bi-camera-reels"></i>&nbsp;SRT-MXF Recorder.Prototype</h2>
+      <h2><i class="bi bi-camera-reels"></i>&nbsp;SRT-MXF Recorder.Prototype v0.01</h2>
       <p></br></p> 
     </center>
 

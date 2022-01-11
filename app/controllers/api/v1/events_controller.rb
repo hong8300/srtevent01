@@ -17,16 +17,27 @@ class Api::V1::EventsController < ApiController
 
     def create
       event = Event.new(event_params)
-      pp "DEBUG"
+      # pp "DEBUG"
+      # pp event
+      logger.debug("DEBUG MESSAGE----------------")
+      logger.debug(event.id)
+
       event.status = 1
       event.server_url = "http://srtserv.unohana.co.jp"
-      event.server_port = 9800
+      event.server_port = 9800 
       event.passphrase = SecureRandom.alphanumeric(16)
-      event.output_filename = "hogehoge.mxf"
+      event.output_filename = "test.mxf"
       event.sdata2 = 'NON'
       event.idata1 = 0
       event.idata2 = 0
       if event.save
+        logger.debug("DEBUG 2")
+        logger.debug(event.id)
+ 
+        event.server_port = 9800 + ( event.id % 100)
+        event.output_filename = "mxfrec-file-"+sprintf("%05d",event.id)+".mxf"
+ 
+        event.save
         render json: event, status: :created
       else
         render json: { errors: event.errors.full_messages }, status: :unprocessable_entity

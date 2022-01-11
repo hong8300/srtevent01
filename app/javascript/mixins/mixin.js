@@ -17,11 +17,15 @@ export default {
     methods: {
         // datetime型から 日付部分を切り出す
         g_dd_date: function(x) {
-          return x.substr(0,10);
+          let tmpstr = new String(x);
+          return tmpstr.substring(0,10);
+          // return tmpstr.substr(0,10);
         },
         // datetime型から 時刻部分を切り出す
         g_dd_time: function(x) {
-          return x.substr(11,5);
+          let tmpstr = new String(x);
+          return tmpstr.substring(11,16);
+          // return x.substr(11,5);
         },
         g_get_status: function(x) {
           return this.status_str[x];
