@@ -6,8 +6,8 @@ export default {
         world: 'World',
         status_str: {
           0: "配信設定 未完了", 
-          1: "配信設定 完了",
-         10: "配信待機(STREAM-WAIT)",
+          1: "配信設定 登録待ち",
+          2: "配信待機(STREAM-WAIT)",
          20: "録画/ファイル生成中(REC)",
          30: "配信完了(FINISHED)"
         }
