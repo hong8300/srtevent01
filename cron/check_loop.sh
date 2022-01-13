@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# cron for Mac
+# */1 * * * * /Users/hong/RAILS/srtevent/cron/check_loop.sh
+#
+# cron for AWS EC2
+#
+
 LOG=/tmp/check_loop.log
 OS_TYPE=`uname`
 echo "---------------------------------------------" >> $LOG
