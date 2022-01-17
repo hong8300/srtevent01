@@ -1,6 +1,6 @@
 
 
-SRTMXF_CRON = "srtmxf_cron.sh"                  # shell for srt to mxf
+SRTMXF_CRON = "kick_ffmpeg.sh"                  # shell for srt to mxf
 
 ## cron ディレクトリ
 dir = ARGV[0] 
@@ -84,7 +84,6 @@ status_list.each  do |each_file|
 
                 # オリジナル crontab 更新
                 system(sprintf("cp %s %s",CRON_NEW_FILE,CRON_ORIGINAL_FILE))
-
 
                 # STATUS を 2に変更
                 system(sprintf("echo 2 > %s",status_filename))
