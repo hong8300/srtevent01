@@ -6,6 +6,9 @@ SRTMXF_CRON = "kick_ffmpeg.sh"                  # shell for srt to mxf
 dir = ARGV[0] 
 ffmpeg = ARGV[1]
 write_dir = ARGV[2]
+api_url = ARGV[3]
+# api_url = "http://0.0.0.0:3000/api/v1/events"
+# http://0.0.0.0:3000/api/v1/events
 
 ## ステータスファイル、情報ファイルのディレクトリ
 sdir = dir + "/status"
@@ -50,6 +53,10 @@ status_list.each  do |each_file|
                 # p passphrase
                 # p output_filename
 
+                # オリジナルファイルの有無確認
+                if File.exist?(CRON_ORIGINAL_FILE) == false then
+                    system(sprintf("touch %s",CRON_ORIGINAL_FILE))    
+                end
                 # オリジナル crontab 読み込み
                 system(sprintf("cp %s %s",CRON_ORIGINAL_FILE,CRON_BACKUP_FILE))
                 fc = File.open(CRON_BACKUP_FILE, "r")
@@ -85,13 +92,14 @@ status_list.each  do |each_file|
                 # オリジナル crontab 更新
                 system(sprintf("cp %s %s",CRON_NEW_FILE,CRON_ORIGINAL_FILE))
 
-                # STATUS を 2に変更
-                system(sprintf("echo 2 > %s",status_filename))
+                # STATUS を 5に変更
+                event_status = 5
+                system(sprintf("echo #{event_status} > %s",status_filename))
+                curl_cmd = "curl -X PUT -H \'Content-Type:application/json\' -d \'{ \"status\":#{event_status} }\' #{api_url}/#{event_id}"
+                system(curl_cmd)
             end
-
-        when 2
-            p "２がでました"
-            system("echo case 2 >> /tmp/check_loop.log")
+        when 5
+            p "5がでました"
         else
             p "それ以外でした"
             p status_number

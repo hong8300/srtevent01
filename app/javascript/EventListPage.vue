@@ -12,6 +12,7 @@
           <tr>
           <td></td>
           <td style="text-align:right;">
+            <button @click="reloadPage()">表示リセット</button>
             <router-link :to="{ name: 'EventTopPage'  }" tag="button"><i class="bi bi-house"></i>&nbsp;HOME</router-link>&nbsp;
           </td>
           </tr>
@@ -24,7 +25,6 @@
         <li><font color="red">{{ e }}</font></li>
       </ul>
     </div>
-
     <table class="table table-striped">
       <tbody>
         <tr>
@@ -62,6 +62,7 @@
           <tr>
           <td></td>
           <td style="text-align:right;">
+            <button @click="reloadPage()">表示リセット</button>
             <router-link :to="{ name: 'EventTopPage'  }" tag="button"><i class="bi bi-house"></i>&nbsp;HOME</router-link>&nbsp;
           </td>
           </tr>
@@ -88,7 +89,8 @@ export default {
       testmessage: "Vue.js メッセージ",
       showModal: false,
       deleteTarget: -1,
-      errors: ''
+      errors: '',
+      rerolad_timer: ''
     }
   },
   methods: {
@@ -101,6 +103,7 @@ export default {
     // reset: function () {
     //   this.$router.go({path: this.$router.currentRoute.path, force: true})
     // },
+
     deleteEvent: function() {
       if (this.deleteTarget <= 0) {
         console.warn('deleteTarget should be grater than zero.');
@@ -125,10 +128,20 @@ export default {
       axios
         .get('/api/v1/events.json')
         .then(response => (this.events = response.data))
+    },
+    reloadPage: function () {
+      this.$router.go({path: this.$router.currentRoute.path, force: true})
     }
+
+
+
   },
   mounted () {
-    this.updateEvents();
+    this.reload_timer = this.updateEvents();
+    setInterval(this.reloadPage, 20000); 
+  },
+  destroyed() {
+    clearInterval(this.reload_timer);
   }
 
 }

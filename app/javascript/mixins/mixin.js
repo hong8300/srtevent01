@@ -5,11 +5,12 @@ export default {
         greeting: '',
         world: 'World',
         status_str: {
-          0: "配信設定 未完了", 
-          1: "配信設定 登録待ち",
-          2: "配信待機(STREAM-WAIT)",
-         20: "録画/ファイル生成中(REC)",
-         30: "配信完了(FINISHED)"
+          0: "0:配信設定 登録待機(WAIT)", 
+          1: "1:配信設定 登録完了(STREAM SET)",
+          5: "5:配信開始待 (STREAM-WAIT)",
+         10: "10:配信録画/ファイル生成中(REC)",
+         30: "30:配信完了(FINISHED)",
+         99: "50:配信削除済"
         }
       }
     },
