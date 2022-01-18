@@ -18,6 +18,7 @@ sdir_glob = sdir + "/*.status"
 CRON_ORIGINAL_FILE = sdir + "/srtmxf_crontab"
 CRON_BACKUP_FILE   = sdir + "/srtmxf_crontab.bk"     
 CRON_NEW_FILE      = sdir + "/srtmxf_crontab.new"
+CRON_TMP_FILE      = sdir + "/srtmxf_crontab.tmpd"
 
 # system(sprintf("echo sdir:%s sdir_glob:%s >> /tmp/check_loop.log",sdir,sdir_glob))
 
@@ -99,7 +100,6 @@ status_list.each  do |each_file|
                 system(curl_cmd)
             end
         when 5
-
             p "5がでました"
         when 99
             p "99がでました"
@@ -122,7 +122,32 @@ status_list.each  do |each_file|
             File.exist?(info_filename) ? File.delete(info_filename) : false
             File.exist?(status_filename) ? File.delete(status_filename) : false
             File.exist?(outfile_fullpath) ? File.delete(outfile_fullpath) : false
-
+            # cron の該当行をコメントアウトする
+            # オリジナル crontab ファイルを読み込む
+            f = File.open(CRON_ORIGINAL_FILE, "r")
+                cron_text = f.read
+            f.close
+            # 更新用 tmp ファイル
+            fw = File.open(CRON_TMP_FILE, "w")
+            update_cron = false
+            # 一行ずつ処理
+            cron_text.each_line { |line| 
+                one_line = line.chomp.strip
+                file_event_id = one_line.split[6]
+                if one_line[0] == "#" then
+                    fw.puts(one_line)
+                elsif file_event_id == event_id  then
+                    # イベント番号が一致したので その行をコメントアウトする
+                    fw.puts("# "+one_line)
+                    update_cron = true
+                else
+                    fw.puts(one_line)
+                end
+            }   
+            fw.close
+            if update_cron == true then
+                system(sprintf("cp %s %s",CRON_TMP_FILE,CRON_ORIGINAL_FILE))
+            end
         else
             p "それ以外でした"
             p status_number

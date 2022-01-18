@@ -54,10 +54,11 @@ cron_text.each_line { |line|
         update_cron = true
     else
         fw.puts(one_line)
+        
     end
 }
 
 fw.close
 if update_cron == true then
-    system(sprintf("cp %s %s",CRON_TMP_FILE,CRON_BACKUP_FILE))
+    system(sprintf("cp %s %s",CRON_TMP_FILE,CRON_ORIGINAL_FILE))
 end
