@@ -36,7 +36,7 @@ if [ $1 == "exec_check" ] ; then
 elif [ $1 == "exec_kick" ] ; then
     ruby $BASE_DIR/cron/check_kick.rb $BASE_DIR/cron $API_URL
 else
-    echo "Unknown Exec type" 
+    echo "Unknown exec type" 
     exit 2
 fi
 

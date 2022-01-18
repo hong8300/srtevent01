@@ -4,7 +4,7 @@
       <p></br></p>    
       <img src="/assets/srt_icon.png" alt="SRT" width="150px" >
       <p></br></p>    
-      <h2><i class="bi bi-camera-reels"></i>&nbsp;SRT-MXF Recorder.Prototype v0.01</h2>
+      <h2><i class="bi bi-camera-reels"></i>&nbsp;SRT-MXF Recorder.Prototype v0.11</h2>
       <p></br></p> 
     </center>
 
@@ -34,7 +34,7 @@
     <div class="row"> 
         <div class="col-1"></div>
         <div class="col-3">
-            <a class="btn btn-outline-primary btn-lg  w-fixs" href="/#/list" role="button">設定&nbsp;(SETTINGS)</a>
+            <a class="btn btn-outline-primary btn-lg  w-fixs" href="/#/setting" role="button">設定&nbsp;(SETTINGS)</a>
         </div>
         <div class="col-8 d-flex align-items-center menu-msg">
             各種設定を行います

@@ -30,7 +30,12 @@ export default {
         },
         g_get_status: function(x) {
           return this.status_str[x];
+        },
+        g_sleep: function(waitMsec) {
+          var startMsec = new Date();
+          while (new Date() - startMsec < waitMsec);
         }
+ 
     },
     computed: {
       hello: function () {

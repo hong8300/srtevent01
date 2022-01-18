@@ -125,12 +125,17 @@ export default {
         });
     },
     updateEvents: function() {
+      // console.log("Now in updateEvents()")
       axios
         .get('/api/v1/events.json')
         .then(response => (this.events = response.data))
     },
     reloadPage: function () {
-      this.$router.go({path: this.$router.currentRoute.path, force: true})
+      // console.log(this.$router.currentRoute.path)
+      // this.g_sleep(5000) 
+      if ( this.$router.currentRoute.path == "/list") {
+        this.$router.go({path: this.$router.currentRoute.path, force: true})
+      }
     }
 
 
@@ -139,6 +144,7 @@ export default {
   mounted () {
     this.reload_timer = this.updateEvents();
     setInterval(this.reloadPage, 20000); 
+
   },
   destroyed() {
     clearInterval(this.reload_timer);

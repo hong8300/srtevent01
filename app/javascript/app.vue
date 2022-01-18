@@ -28,7 +28,8 @@ import EventTopPage from 'EventTopPage.vue'
 import EventDetailPage from 'EventDetailPage.vue'
 import EventNewPage from 'EventNewPage.vue'
 import EventEditPage from 'EventEditPage.vue'
-                          
+import EventSettingPage from 'EventSettingPage.vue'
+
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
 const router = new VueRouter({
@@ -48,7 +49,11 @@ const router = new VueRouter({
       component: EventNewPage    },
     { path: '/events/:id(\\d+)/edit',
       name: 'EventEditPage',
-      component: EventEditPage   }
+      component: EventEditPage   },
+    { path: '/setting',
+      name: 'EventSettingPage',
+      component: EventSettingPage    }
+
   ]
 })
 
