@@ -6,10 +6,11 @@ export default {
         world: 'World',
         status_str: {
           0: "0:配信設定 登録待機(WAIT)", 
-          1: "1:配信設定 登録完了(STREAM SET)",
-          5: "5:配信開始待 (STREAM-WAIT)",
-         10: "10:配信録画/ファイル生成中(REC)",
-         30: "30:配信完了(FINISHED)",
+          1: "1:配信設定 登録完了(Setup completed)",
+          5: "5:配信開始待 (Waiting for server start)",
+         10: "10:サーバースタート (server is running, Waiting SRT Stream)",
+         20: "15:配信録画/ファイル生成中(Receiving and recording)",
+         30: "30:配信完了(completed)",
          99: "50:配信削除済"
         }
       }

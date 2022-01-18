@@ -99,7 +99,30 @@ status_list.each  do |each_file|
                 system(curl_cmd)
             end
         when 5
+
             p "5がでました"
+        when 99
+            p "99がでました"
+            p "関連ファイルを削除します"
+            event_id = File.basename(each_file, ".status") 
+            info_filename = sdir + "/" + event_id + ".info" 
+            status_filename = sdir + "/" + event_id + ".status"
+            outfile = ""
+            File.open(info_filename, "r") do |fi|
+                rec_starttime = fi.gets.chomp
+                # cron_time = rec_starttime[0,11] # 先頭から 11 文字
+                server_url = fi.gets.chomp
+                server_port = fi.gets.chomp
+                passphrase = fi.gets.chomp
+                outfile = fi.gets.chomp
+            end
+            p "------- output.filename -------"
+            outfile_fullpath = write_dir + "/" + outfile
+            p outfile_fullpath
+            File.exist?(info_filename) ? File.delete(info_filename) : false
+            File.exist?(status_filename) ? File.delete(status_filename) : false
+            File.exist?(outfile_fullpath) ? File.delete(outfile_fullpath) : false
+
         else
             p "それ以外でした"
             p status_number

@@ -29,9 +29,14 @@ else
     exit 1
 fi
 
+# echo $#
+
 # check exec mode
 if [ $1 == "exec_check" ] ; then
-    sleep 15
+    # production mode
+    if [ $# == 1 ] ; then
+        sleep 15
+    fi
     ruby $BASE_DIR/cron/check_loop.rb $BASE_DIR/cron $FFMPEG $WRITE_DIR $API_URL
 elif [ $1 == "exec_kick" ] ; then
     ruby $BASE_DIR/cron/check_kick.rb $BASE_DIR/cron $API_URL

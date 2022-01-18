@@ -79,7 +79,19 @@ class Api::V1::EventsController < ApiController
     end
 
     def destroy
+      # logger.debug("------- DELETE 1----------------------------------")
+      event = @event
       @event.destroy!
+
+      # ステータスファイル 99セット（削除要求）
+      filename_body = Rails.root.to_s + "/cron/status/" + event.id.to_s
+      status_filename = filename_body + ".status"
+      info_filename = filename_body + ".info"
+      # File.delete(status_filename)
+      # File.delete(info_filename)
+      File.open(status_filename,"w") do |f|
+        f.printf("%d",99)
+      end
       head :no_content
     end
 

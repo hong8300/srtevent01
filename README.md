@@ -56,13 +56,14 @@ curl -X PUT -H 'Content-Type:application/json' -d '{ "status":2 }' http://0.0.0.
 
 ## 対応済
 - Reload バグ
+- Setting 画面
+- AWS UDP/9000ポート開放
+- 削除処理で cron 登録も削除
+- 過去のイベントを登録できないようにする(バリデート)
 
 ## 残作業
-- Setting 画面
-- 削除処理で cron 登録も削除
+- 録画開始、終了のステータス確認方法
 - AWS での動作確認
 - AWS:FSx 接続
 - ダウンロード機能
 - Preview 機能
-- 録画開始、終了のステータス確認方法
-- 過去のイベントを登録できないようにする(バリデート)
