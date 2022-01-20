@@ -1,14 +1,14 @@
 
+require "open3"
 
 SRTMXF_CRON = "kick_ffmpeg.sh"                  # shell for srt to mxf
 
 ## cron ディレクトリ
-dir = ARGV[0] 
+base_dir = ARGV[0]
+dir = base_dir  + "/cron"
 ffmpeg = ARGV[1]
 write_dir = ARGV[2]
 api_url = ARGV[3]
-# api_url = "http://0.0.0.0:3000/api/v1/events"
-# http://0.0.0.0:3000/api/v1/events
 
 ## ステータスファイル、情報ファイルのディレクトリ
 sdir = dir + "/status"
@@ -20,9 +20,32 @@ CRON_BACKUP_FILE   = sdir + "/srtmxf_crontab.bk"
 CRON_NEW_FILE      = sdir + "/srtmxf_crontab.new"
 CRON_TMP_FILE      = sdir + "/srtmxf_crontab.tmpd"
 
-# system(sprintf("echo sdir:%s sdir_glob:%s >> /tmp/check_loop.log",sdir,sdir_glob))
+#
+# FUNCTION:
+# Get output filename 
+#
+def get_outfilename(fname)
+    # p "now in get_outfilename()"
+    outfilename = ""
+    File.open(fname, "r") do |f|
+        f.gets
+        f.gets
+        f.gets
+        f.gets
+        outfilename = f.gets.chomp
+    end
+    return outfilename
+end
 
-### main loop
+def update_status( p_event_id, p_event_status,p_status_filename, p_api_url )
+#    p_event_status = 20
+    system(sprintf("echo #{p_event_status} > %s",p_status_filename)) 
+    curl_cmd = "curl -X PUT -H \'Content-Type:application/json\' -d \'{ \"status\":#{p_event_status} }\' #{p_api_url}/#{p_event_id}"
+    system(curl_cmd)     
+end
+#
+# Main Process
+#
 status_list = Dir.glob(sdir_glob)
 status_list.each  do |each_file|
     status_number = 0
@@ -30,13 +53,17 @@ status_list.each  do |each_file|
     File.open(each_file, "r") do |fs|
         status_number = fs.read.to_i
     end
+
+    # イベントID
+    event_id = File.basename(each_file, ".status") 
+    # 情報ファイル名
+    info_filename = sdir + "/" + event_id + ".info" 
+    # ステータスファイル名
+    status_filename = sdir + "/" + event_id + ".status"
+
     case status_number
         when 1
-            p "STATUS:1"
-            p "CRON へ登録します"
-            event_id = File.basename(each_file, ".status") 
-            info_filename = sdir + "/" + event_id + ".info" 
-            status_filename = sdir + "/" + event_id + ".status"
+            p "Status is 1"
             # 情報ファイル .info の内容を crontab に登録する
             File.open(info_filename, "r") do |fi|
                 rec_starttime = fi.gets.chomp
@@ -94,34 +121,102 @@ status_list.each  do |each_file|
                 system(sprintf("cp %s %s",CRON_NEW_FILE,CRON_ORIGINAL_FILE))
 
                 # STATUS を 5に変更
-                event_status = 5
-                system(sprintf("echo #{event_status} > %s",status_filename))
-                curl_cmd = "curl -X PUT -H \'Content-Type:application/json\' -d \'{ \"status\":#{event_status} }\' #{api_url}/#{event_id}"
-                system(curl_cmd)
+                update_status( event_id, 5, status_filename, api_url )
             end
         when 5
-            p "5がでました"
-        when 99
-            p "99がでました"
-            p "関連ファイルを削除します"
-            event_id = File.basename(each_file, ".status") 
-            info_filename = sdir + "/" + event_id + ".info" 
-            status_filename = sdir + "/" + event_id + ".status"
-            outfile = ""
-            File.open(info_filename, "r") do |fi|
-                rec_starttime = fi.gets.chomp
-                # cron_time = rec_starttime[0,11] # 先頭から 11 文字
-                server_url = fi.gets.chomp
-                server_port = fi.gets.chomp
-                passphrase = fi.gets.chomp
-                outfile = fi.gets.chomp
+            p "Status is 5"
+        when 10 # ストリームwait 
+            p "Status is 10"
+            # OUTPUTファイルが存在すれば ステータスを Rec にする
+            outfile_fullpath = write_dir + "/" + get_outfilename(info_filename)
+            if File.exist?(outfile_fullpath) then
+                # STATUS を 20 に変更
+                update_status( event_id, 20, status_filename, api_url )     
             end
-            p "------- output.filename -------"
-            outfile_fullpath = write_dir + "/" + outfile
+        when 20 # Rec中
+            p "Status is 20"
+
+            # プロセスが存在しなければ ステータスを プロキシー生成(30)にする
+            cmd_str = "ps -a | grep kick_ffmpeg.sh | grep -v grep"
+            # p cmd_str 
+            process_exec = false
+            result, err, status = Open3.capture3("#{cmd_str}")
+            result.each_line { |line| 
+                p "------------ check kick_ffmpeg.sh process --------"
+                p line
+                # p line.chomp.split(' ')[4]
+                comp_event_id = line.chomp.split(' ')[5]
+                p comp_event_id
+                p event_id
+                if comp_event_id == event_id then
+                    p "---PROCESS FOUND---"
+                    process_exec = true
+                    break
+                end
+            }
+            if process_exec == false then
+                p "----PROCESS NOT FOUND"
+                # STATUS を 30 に変更
+                update_status( event_id, 30, status_filename, api_url )     
+            end
+        when 30
+            p "Status is 30"
+            # ファイル変換をキック
+            # ffmpeg をキックして MXF を MP4 に変換する（非同期起動）
+            outfile_fullpath = write_dir + "/" + get_outfilename(info_filename)
+            cmd_str = sprintf("%s -y -i %s %s/public/downloads/%s.mp4",ffmpeg,outfile_fullpath,base_dir,File.basename(outfile_fullpath,".mxf"))
+            p cmd_str 
+            Open3.popen3("#{cmd_str} > /dev/null 2>&1")
+            # STATUS を 40 に変更
+            update_status( event_id, 40, status_filename, api_url )   
+        when 40
+            p "Status is 40"
+            # 40:変換完了チェック
+            # ffmpeg が起動されていなかったら ステータスを 40 　にする
+
+            # 変換プロセスチェック
+            cmd_str = "ps -a | grep ffmpeg | grep -v grep | grep mxf | grep mp4 "
+            # p cmd_str 
+            process_exec = false
+            result, err, status = Open3.capture3("#{cmd_str}")
+            result.each_line { |line| 
+                p line
+                process_exec = true              
+            }
+            if process_exec == false then
+                p "----PROCESS NOT FOUND"
+                # STATUS を 50 に変更
+                update_status( event_id, 50, status_filename, api_url )     
+            end
+        when 50
+            p "Status is 50"
+            # 50:完了(All Completed)
+
+        when 99
+            p "Status is 99"
+            p "関連ファイルを削除します"
+            # event_id = File.basename(each_file, ".status") 
+            # info_filename = sdir + "/" + event_id + ".info" 
+            # status_filename = sdir + "/" + event_id + ".status"
+            # outfile = ""
+            # p get_outfilename(info_filename)
+            # File.open(info_filename, "r") do |fi|
+            #     rec_starttime = fi.gets.chomp
+            #     # cron_time = rec_starttime[0,11] # 先頭から 11 文字
+            #     server_url = fi.gets.chomp
+            #     server_port = fi.gets.chomp
+            #     passphrase = fi.gets.chomp
+            #     outfile = fi.gets.chomp
+            # end
+            # p "------- output.filename -------"
+            outfile_fullpath = write_dir + "/" + get_outfilename(info_filename)
             p outfile_fullpath
+            mp4_proxy  = sprintf("%s/public/downloads/%s.mp4",base_dir,File.basename(outfile_fullpath,".mxf"))
             File.exist?(info_filename) ? File.delete(info_filename) : false
             File.exist?(status_filename) ? File.delete(status_filename) : false
             File.exist?(outfile_fullpath) ? File.delete(outfile_fullpath) : false
+            File.exist?(mp4_proxy) ? File.delete(mp4_proxy) : false
+
             # cron の該当行をコメントアウトする
             # オリジナル crontab ファイルを読み込む
             f = File.open(CRON_ORIGINAL_FILE, "r")
@@ -153,3 +248,4 @@ status_list.each  do |each_file|
             p status_number
         end
 end
+

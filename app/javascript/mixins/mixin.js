@@ -5,12 +5,14 @@ export default {
         greeting: '',
         world: 'World',
         status_str: {
-          0: "0:配信設定 登録待機(WAIT)", 
-          1: "1:配信設定 登録完了(Setup completed)",
-          5: "5:配信開始待 (Waiting for server start)",
-         10: "10:サーバースタート (server is running, Waiting SRT Stream)",
-         20: "15:配信録画/ファイル生成中(Receiving and recording)",
-         30: "30:配信完了(completed)",
+          0: "00:配信設定 登録待機(WAIT)", 
+          1: "01:配信設定 登録完了(Setup completed)",
+          5: "05:配信開始待 (Waiting for server start)",
+         10: "10:サーバースタート (server is up, Waiting SRT Stream)",
+         20: "20:配信録画/ファイル生成中(Recording MXF)",
+         30: "30:配信録画完了(Waitting for convert)",
+         40: "40:プロキシー生成中(Converting MP4)",
+         50: "50:完了(All Completed)",
          99: "50:配信削除済"
         }
       }

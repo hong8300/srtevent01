@@ -37,9 +37,9 @@ if [ $1 == "exec_check" ] ; then
     if [ $# == 1 ] ; then
         sleep 15
     fi
-    ruby $BASE_DIR/cron/check_loop.rb $BASE_DIR/cron $FFMPEG $WRITE_DIR $API_URL
+    ruby $BASE_DIR/cron/check_loop.rb $BASE_DIR $FFMPEG $WRITE_DIR $API_URL
 elif [ $1 == "exec_kick" ] ; then
-    ruby $BASE_DIR/cron/check_kick.rb $BASE_DIR/cron $API_URL
+    ruby $BASE_DIR/cron/check_kick.rb $BASE_DIR $API_URL
 else
     echo "Unknown exec type" 
     exit 2

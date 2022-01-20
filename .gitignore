@@ -7,6 +7,9 @@
 /cron/status/*
 !/cron/status/.keep
 
+/public/downloads/*
+!/public/downloads/.keep
+
 # Ignore bundler config.
 /.bundle
 

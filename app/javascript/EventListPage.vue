@@ -42,10 +42,52 @@
           <td>{{ e.description }}</td>
           <td>{{ g_dd_date(e.rec_starttime) }} {{ g_dd_time(e.rec_starttime) }} </td>
           <td>{{ e.sdata1 }}</td>
-          <td>{{ g_get_status(e.status) }}</td>
+
+          <!-- 1: "1:配信設定 登録完了(Setup completed)",
+          5: "5:配信開始待 (Waiting for server start)",
+         10: "10:サーバースタート (server is running, Waiting SRT Stream)",
+         20: "15:配信録画/ファイル生成中(Receiving and recording)",
+         30: "30:配信完了(completed)", -->
+
+          <td v-if = "e.status == 1">
+            <font color="Gray">
+              <b>  {{ g_get_status(e.status) }}</b>
+            </font>
+          <td v-else-if = "e.status == 5">
+            <font color="Blue">
+              <b>  {{ g_get_status(e.status) }}</b>
+            </font>
+          <td v-else-if = "e.status == 10">
+            <font color="Orange">
+              <b>  {{ g_get_status(e.status) }}</b>
+            </font>
+          <td v-else-if = "e.status == 20">
+            <font color="RED">
+              <b>  {{ g_get_status(e.status) }}</b>
+            </font>
+          <td v-else-if = "e.status == 30">
+            <font color="Skyblue">
+              <b>  {{ g_get_status(e.status) }}</b>
+            </font>
+          <td v-else-if = "e.status == 40">
+            <font color="Darkkhaki">
+              <b>  {{ g_get_status(e.status) }}</b>
+            </font>
+          <td v-else-if = "e.status == 50">
+            <font color="Green">
+              <b>  {{ g_get_status(e.status) }}</b>
+            </font>
+          <td v-else>
+            <font color="PINK">
+              <b>  {{ g_get_status(e.status) }}</b>
+            </font>
+          </td>
           <td>
               <router-link :to="{ name: 'EventDetailPage', params: { id: e.id } }" tag="button"><i class="bi bi-file-bar-graph"></i>&nbsp;イベント詳細</router-link>&nbsp;
               <button @click="deleteTarget = e.id; showModal = true">{{e.id}}: 削除</button>
+              <!-- <button v-if = "e.status == 50" onclick="location.href='/downloads/mxfrec-file-00002.mp4'">{{ e.id }}:プレビューPROXY</button> -->
+              <button v-if = "e.status == 50" @click="jurl(e.id)">{{ e.id }}:プレビューPROXY</button> 
+
           </td>
         </tr>
       </tbody>
@@ -94,6 +136,14 @@ export default {
     }
   },
   methods: {
+    jurl: function(id) {      
+        console.log(id)
+        var ret = ( '00000' + id ).slice( -5 );
+        var urls = "/downloads/mxfrec-file-"+ ret + ".mp4"
+        console.log(urls)
+        // location.href='/downloads/mxfrec-file-00003.mp4'
+        location.href=urls
+    },
     // dd_date: function(x) {
     //     return x.substr(0,10);
     // },

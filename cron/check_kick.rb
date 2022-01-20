@@ -2,7 +2,7 @@
 require "open3"
 
 ## cron ディレクトリ
-dir = ARGV[0] 
+dir = ARGV[0] + "/cron"
 api_url = ARGV[1]
 
 ## ステータスファイル、情報ファイルのディレクトリ
