@@ -37,8 +37,15 @@ export default {
         g_sleep: function(waitMsec) {
           var startMsec = new Date();
           while (new Date() - startMsec < waitMsec);
+        },
+        g_jurl: function(id) {      
+          console.log(id)
+          var ret = ( '00000' + id ).slice( -5 );
+          var urls = "/downloads/mxfrec-file-"+ ret + ".mp4"
+          console.log(urls)
+          // location.href='/downloads/mxfrec-file-00003.mp4'
+          location.href=urls
         }
- 
     },
     computed: {
       hello: function () {
