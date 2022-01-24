@@ -9,6 +9,8 @@ dir = base_dir  + "/cron"
 ffmpeg = ARGV[1]
 write_dir = ARGV[2]
 api_url = ARGV[3]
+ps_option = ARGV[4]
+ps_event_index = ARGV[5].to_i
 
 ## ステータスファイル、情報ファイルのディレクトリ
 sdir = dir + "/status"
@@ -137,8 +139,9 @@ status_list.each  do |each_file|
             p "Status is 20"
 
             # プロセスが存在しなければ ステータスを プロキシー生成(30)にする
-#            cmd_str = "ps -a | grep kick_ffmpeg.sh | grep -v grep"
-            cmd_str = "ps -def | grep kick_ffmpeg.sh | grep -v grep"
+            # MAC: cmd_str = "ps -a | grep kick_ffmpeg.sh | grep -v grep"
+            # AWS: cmd_str = "ps -def | grep kick_ffmpeg.sh | grep -v grep"
+            cmd_str = "ps #{ps_option} | grep kick_ffmpeg.sh | grep -v grep"
             # p cmd_str 
             process_exec = false
             result, err, status = Open3.capture3("#{cmd_str}")
@@ -146,8 +149,9 @@ status_list.each  do |each_file|
                 p "------------ check kick_ffmpeg.sh process --------"
                 p line
                 # p line.chomp.split(' ')[4]
-#                comp_event_id = line.chomp.split(' ')[5]
-                comp_event_id = line.chomp.split(' ')[9]
+                # Mac: comp_event_id = line.chomp.split(' ')[5]
+                # AWS: comp_event_id = line.chomp.split(' ')[9]
+                comp_event_id = line.chomp.split(' ')[ps_event_index]
                 p comp_event_id
                 p event_id
                 if comp_event_id == event_id then
@@ -177,9 +181,9 @@ status_list.each  do |each_file|
             # ffmpeg が起動されていなかったら ステータスを 40 　にする
 
             # 変換プロセスチェック
-#            cmd_str = "ps -a | grep ffmpeg | grep -v grep | grep mxf | grep mp4 "
-            cmd_str = "ps -def | grep ffmpeg | grep -v grep | grep mxf | grep mp4 "
-
+            # Mac: cmd_str = "ps -a | grep ffmpeg | grep -v grep | grep mxf | grep mp4 "
+            # AWS: cmd_str = "ps -def | grep ffmpeg | grep -v grep | grep mxf | grep mp4 "
+            cmd_str = "ps #{ps_option} | grep ffmpeg | grep -v grep | grep mxf | grep mp4 "
             # p cmd_str 
             process_exec = false
             result, err, status = Open3.capture3("#{cmd_str}")
