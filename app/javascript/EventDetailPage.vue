@@ -80,13 +80,25 @@
     <div class="row"><!--- メッセージ -->
       <div class="col-1"></div>
         <div class="col-10">
-        イベントの録画、ファイル生成は <b>{{g_dd_date(event.rec_starttime)}}</b> の <b>{{g_dd_time(event.rec_starttime)}}</b> に開始されます。</br>
-        サーバー側は SRT Listener モードで上記時間に待機しますので、SRT配信機器側（映像打ち上げ）はこの時刻よりあとに配信を開始(CALLER)してください。</br>
+        <h5><font color="red">注意事項</font></h5>
+        <div class="border border-danger" style="padding:10px;">
+          イベントの録画、ファイル生成は <b>{{g_dd_date(event.rec_starttime)}}</b> の <b>{{g_dd_time(event.rec_starttime)}}</b> に開始されます。</br>
+          サーバー側は SRT Listener モードで上記時間に待機しますので、SRT配信機器側（映像打ち上げ）はこの時刻よりあとに配信を開始(CALLER)してください。</br>
+          </br>
+          SRT配信機器では以下の設定で ストリームをサーバーに配信してください。</br>
+          サーバーアドレスおよびポート: <b>srt://{{event.server_url}}:{{event.server_port}}</b></br>
+          配信モード: <b>CALLER モード</b></br>
+          パスワード(AES128): <b>{{event.passphrase}}</b></br>
+        </div>
         </br>
-        SRT配信機器では以下の設定で ストリームをサーバーに配信してください。</br>
-        サーバーアドレスおよびポート: <b>{{event.server_url}}:{{event.server_port}}</b></br>
-        配信モード: <b>CALLER モード</b></br>
-        パスワード(AES128): <b>{{event.passphrase}} </b></br>
+        <h5><font color="blue">サンプル</font></h5>
+        <div class="border border-primary" style="padding:10px;">
+          ffmpeg 打ち上げサンプル(AWS):</br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>ffmpeg -re -f lavfi -i testsrc=s=1920x1080:r=29.96 -vcodec h264 -pix_fmt yuv420p -f mpegts "srt://{{event.server_url}}:{{event.server_port}}?mode=caller&passphrase={{event.passphrase}}"</b><br>
+          ffmpeg 打ち上げサンプル(Mac):</br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<b>ffmpeg -re -f lavfi -i testsrc=s=1920x1080:r=29.96 -vcodec h264 -pix_fmt yuv420p -f mpegts "srt://:{{event.server_port}}?mode=caller&passphrase={{event.passphrase}}"</b><br>
+        </div>
+        </br>
         </div>
       <div class="col-1"></div>
     </div>

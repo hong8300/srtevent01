@@ -21,7 +21,7 @@ class Api::V1::EventsController < ApiController
       # logger.debug(event.id)
 
       event.status = 1
-      event.server_url = "http://srtserv.unohana.co.jp"
+      event.server_url = "srtserve.unohana.co.jp"
       event.server_port = 9800 
       event.passphrase = SecureRandom.alphanumeric(16)
       event.output_filename = "test.mxf"
