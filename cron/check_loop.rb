@@ -137,7 +137,8 @@ status_list.each  do |each_file|
             p "Status is 20"
 
             # プロセスが存在しなければ ステータスを プロキシー生成(30)にする
-            cmd_str = "ps -a | grep kick_ffmpeg.sh | grep -v grep"
+#            cmd_str = "ps -a | grep kick_ffmpeg.sh | grep -v grep"
+            cmd_str = "ps -def | grep kick_ffmpeg.sh | grep -v grep"
             # p cmd_str 
             process_exec = false
             result, err, status = Open3.capture3("#{cmd_str}")
@@ -145,7 +146,8 @@ status_list.each  do |each_file|
                 p "------------ check kick_ffmpeg.sh process --------"
                 p line
                 # p line.chomp.split(' ')[4]
-                comp_event_id = line.chomp.split(' ')[5]
+#                comp_event_id = line.chomp.split(' ')[5]
+                comp_event_id = line.chomp.split(' ')[9]
                 p comp_event_id
                 p event_id
                 if comp_event_id == event_id then
