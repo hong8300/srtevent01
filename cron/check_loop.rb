@@ -177,7 +177,9 @@ status_list.each  do |each_file|
             # ffmpeg が起動されていなかったら ステータスを 40 　にする
 
             # 変換プロセスチェック
-            cmd_str = "ps -a | grep ffmpeg | grep -v grep | grep mxf | grep mp4 "
+#            cmd_str = "ps -a | grep ffmpeg | grep -v grep | grep mxf | grep mp4 "
+            cmd_str = "ps -def | grep ffmpeg | grep -v grep | grep mxf | grep mp4 "
+
             # p cmd_str 
             process_exec = false
             result, err, status = Open3.capture3("#{cmd_str}")
@@ -186,9 +188,11 @@ status_list.each  do |each_file|
                 process_exec = true              
             }
             if process_exec == false then
-                p "----PROCESS NOT FOUND"
-                # STATUS を 50 に変更
-                update_status( event_id, 50, status_filename, api_url )     
+              p "----CONVERT PROCESS NOT FOUND"
+              # STATUS を 50 に変更
+              update_status( event_id, 50, status_filename, api_url )     
+            else 
+              p "----CONVERT PROCESS FOUND"
             end
         when 50
             p "Status is 50"

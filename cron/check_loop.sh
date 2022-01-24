@@ -21,7 +21,7 @@ elif [ $OS_TYPE == "Linux" ]; then
     echo "-----> AWS EC2 shell start"
     BASE_DIR=/home/srtuser/RAILS/srtevent01
     FFMPEG=/usr/bin/ffmpeg
-    WRITE_DIR=/tmp
+    WRITE_DIR=/mnt/srtnfs
     API_URL="http://0.0.0.0/api/v1/events"
 
 else
