@@ -98,7 +98,14 @@
           ffmpeg 打ち上げサンプル(Mac):</br>
           &nbsp;&nbsp;&nbsp;&nbsp;<b>ffmpeg -re -f lavfi -i testsrc=s=1920x1080:r=29.96 -vcodec h264 -pix_fmt yuv420p -f mpegts "srt://:{{event.server_port}}?mode=caller&passphrase={{event.passphrase}}"</b><br>
         </div>
-        </br></br>
+	</br>
+        <h5><font color="Green">収録ファイル</font></h5>
+        <div class="border border-success" style="padding:10px;">
+          MXF ファイル /mnt/srtnfs/{{event.output_filename}}</br>
+          MP4 Proxy ファイル</br>
+	</div>
+
+	</br>
         </div>
       <div class="col-1"></div>
     </div>
