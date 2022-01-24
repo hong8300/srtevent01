@@ -86,8 +86,7 @@
               <router-link :to="{ name: 'EventDetailPage', params: { id: e.id } }" tag="button"><i class="bi bi-file-bar-graph"></i>&nbsp;イベント詳細</router-link>&nbsp;
               <button @click="deleteTarget = e.id; showModal = true">{{e.id}}: 削除</button>
               <!-- <button v-if = "e.status == 50" onclick="location.href='/downloads/mxfrec-file-00002.mp4'">{{ e.id }}:プレビューPROXY</button> -->
-              <button v-if = "e.status == 50" @click="g_jurl(e.id)">{{ e.id }}:プレビューPROXY</button> 
-
+              <button v-if = "e.status == 50" @click="g_jurl(e.id)"> プレビューPROXY </button> 
           </td>
         </tr>
       </tbody>
