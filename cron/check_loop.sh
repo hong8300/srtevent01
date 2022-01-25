@@ -38,14 +38,19 @@ fi
 if [ $1 == "exec_check" ] ; then
     # production mode
     if [ $# == 1 ] ; then
-        sleep 15
+        sleep 16
     fi
     ruby $BASE_DIR/cron/check_loop.rb $BASE_DIR $FFMPEG $WRITE_DIR $API_URL $PS_OPTION $PS_EVENT_INDEX
+    sleep 30
+    ruby $BASE_DIR/cron/check_loop.rb $BASE_DIR $FFMPEG $WRITE_DIR $API_URL $PS_OPTION $PS_EVENT_INDEX
+
 elif [ $1 == "exec_kick" ] ; then
     # production mode
     if [ $# == 1 ] ; then
-        sleep 3
+        sleep 1
     fi
+    ruby $BASE_DIR/cron/check_kick.rb $BASE_DIR $API_URL
+    sleep 30
     ruby $BASE_DIR/cron/check_kick.rb $BASE_DIR $API_URL
 else
     echo "Unknown exec type" 

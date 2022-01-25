@@ -103,7 +103,7 @@
             <h5><font color="Green">収録ファイル</font></h5>
             <div class="border border-success" style="padding:10px;">
               MXF ファイル /mnt/srtnfs/{{event.output_filename}}</br>
-              MP4 Proxy ファイル  <button type="button" class="btn btn-outline-secondary btn-sm" @click="g_jurl(event.id)"> Preview </button></br>
+              MP4 Proxy ファイル  <button @click="g_jurl(event.id)"> Preview </button></br>
             </div>
             </br>
           </div> 

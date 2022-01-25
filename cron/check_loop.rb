@@ -155,13 +155,13 @@ status_list.each  do |each_file|
                 p comp_event_id
                 p event_id
                 if comp_event_id == event_id then
-                    p "---PROCESS FOUND---"
+                    p "--- Recording PROCESS FOUND - status not change ---"
                     process_exec = true
                     break
                 end
             }
             if process_exec == false then
-                p "----PROCESS NOT FOUND"
+                p "---- Recording ROCESS NOT FOUND - next status 30 -->"
                 # STATUS を 30 に変更
                 update_status( event_id, 30, status_filename, api_url )     
             end
