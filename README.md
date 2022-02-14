@@ -61,9 +61,34 @@ curl -X PUT -H 'Content-Type:application/json' -d '{ "status":2 }' http://0.0.0.
 - 削除処理で cron 登録も削除
 - 過去のイベントを登録できないようにする(バリデート)
 - 録画開始、終了のステータス確認方法
-
-## 残作業
 - AWS での動作確認
-- AWS:FSx 接続
 - ダウンロード機能
 - Preview 機能
+
+## 残作業
+- AWS:FSx 接続
+
+### Mac 初期化して開始（手順)
+#### cron を動作させる
+```
+crontab -l
+*/1 * * * * /Users/hong/RAILS/srtevent/cron/check_loop.sh 
+*/1 * * * * /Users/hong/RAILS/srtevent/cron/exec_ffmpeg.sh
+```
+
+#### 初期化・開始
+```
+cd /Users/hong/RAILS/srtevent
+rails db:migirate:reset
+rm cron/status/*
+rails s
+```
+#### ffmpeg 監視 sh
+```
+cron/ctest.sh
+```
+#### 配信開始方法：Webイベント詳細ページから テストパターン送出コマンドを発行
+```
+ffmpeg -re -f lavfi -i testsrc=s=1920x1080:r=29.96 -vcodec h264 -pix_fmt yuv420p -f mpegts "srt://:9802?mode=caller&passphrase=OrEOFv52v2mUf7cI"
+```
+#### 配信終了方法：送出した上記コマンドを停止させる

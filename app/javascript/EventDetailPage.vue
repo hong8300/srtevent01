@@ -99,10 +99,21 @@
             &nbsp;&nbsp;&nbsp;&nbsp;<b>ffmpeg -re -f lavfi -i testsrc=s=1920x1080:r=29.96 -vcodec h264 -pix_fmt yuv420p -f mpegts "srt://:{{event.server_port}}?mode=caller&passphrase={{event.passphrase}}"</b><br>
           </div>
           </br>
+          <div v-if = "event.status >= 20">
+            <h5><font color="Green">収録ファイル：サムネイル</font></h5>
+            <div class="border border-success" style="padding:10px;">
+              <center>
+              <img :src="'/downloads/out' + event.id + '.jpg'">
+              </center>
+            </div>
+            </br>
+          </div> 
+
           <div v-if = "event.status == 50">
             <h5><font color="Green">収録ファイル</font></h5>
             <div class="border border-success" style="padding:10px;">
-              MXF ファイル /mnt/srtnfs/{{event.output_filename}}</br>
+              MXF ファイル /mnt/srtnfs/{{event.output_filename}}(AWS)</br>
+              MXF ファイル /Users/hong/Desktop/tmp/{{event.output_filename}}(Mac)</br>
               MP4 Proxy ファイル  <button @click="g_jurl(event.id)"> Preview </button></br>
             </div>
             </br>
@@ -140,7 +151,8 @@ export default {
   mixins: [Mixin],
   data: function () {
     return {
-      event: {}
+      event: {},
+      outdata: "2"
     }
   },
   mounted () {

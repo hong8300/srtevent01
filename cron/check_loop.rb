@@ -6,6 +6,7 @@ SRTMXF_CRON = "kick_ffmpeg.sh"                  # shell for srt to mxf
 ## cron ディレクトリ
 base_dir = ARGV[0]
 dir = base_dir  + "/cron"
+
 ffmpeg = ARGV[1]
 write_dir = ARGV[2]
 api_url = ARGV[3]
@@ -107,7 +108,8 @@ status_list.each  do |each_file|
                     for var in wbuffer do
                         fc.puts(var)
                     end
-                    cron_line = sprintf("%s * %s/%s %d %d %s %s/%s %s",
+                    outimage = sprintf("%s/public/downloads/out%d.jpg",base_dir,event_id)
+                    cron_line = sprintf("%s * %s/%s %d %d %s %s/%s %s %s",
                         cron_time,dir,
                         SRTMXF_CRON,
                         event_id,
@@ -115,7 +117,8 @@ status_list.each  do |each_file|
                         passphrase,
                         write_dir,
                         output_filename,
-                        ffmpeg)
+                        ffmpeg,
+                        outimage)
                     fc.puts(cron_line)
                 fc.close
 
@@ -222,10 +225,12 @@ status_list.each  do |each_file|
             outfile_fullpath = write_dir + "/" + get_outfilename(info_filename)
             p outfile_fullpath
             mp4_proxy  = sprintf("%s/public/downloads/%s.mp4",base_dir,File.basename(outfile_fullpath,".mxf"))
+            jpg_proxy  = sprintf("%s/public/downloads/out%d.jpg",base_dir,event_id)
             File.exist?(info_filename) ? File.delete(info_filename) : false
             File.exist?(status_filename) ? File.delete(status_filename) : false
             File.exist?(outfile_fullpath) ? File.delete(outfile_fullpath) : false
             File.exist?(mp4_proxy) ? File.delete(mp4_proxy) : false
+            File.exist?(jpg_proxy) ? File.delete(jpg_proxy) : false
 
             # cron の該当行をコメントアウトする
             # オリジナル crontab ファイルを読み込む
