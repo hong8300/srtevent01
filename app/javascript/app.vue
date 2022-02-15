@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar navbar-dark bg-primary">
+    <nav class="navbar navbar-dark bg-success">
     <div class="container-fluid">
       <span class="navbar-brand mb-0 h1">SRT-MXF Recorder</span>
     </div>

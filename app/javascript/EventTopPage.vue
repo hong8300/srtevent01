@@ -2,9 +2,11 @@
   <div id="app">
     <center> <!--// Title --->
       <p></br></p>    
-      <img src="/assets/srt_icon.png" alt="SRT" width="150px" >
+      <img src="/assets/srt_icon.png" alt="SRT" width="100px" >
+      &nbsp;&nbsp;&nbsp;      
+      <img src="/assets/photron.png" alt="SRT" width="300px" >
       <p></br></p>    
-      <h2><i class="bi bi-camera-reels"></i>&nbsp;SRT-MXF Recorder.Prototype v0.43</h2>
+      <h2><i class="bi bi-camera-reels"></i>&nbsp;SRT-MXF Recorder.Prototype v0.62</h2>
       <p></br></p> 
     </center>
 
